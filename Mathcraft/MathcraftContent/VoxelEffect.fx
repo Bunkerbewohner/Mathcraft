@@ -13,6 +13,7 @@ texture Materials;
 sampler MaterialSampler = sampler_state
 {
 	Texture = (Materials);
+	MagFilter = Linear;
 };
 
 struct VertexShaderInput

@@ -23,6 +23,7 @@ namespace Mathcraft
         TextInputComponent textInput;
 
         MathGeometry geom;
+        Random rand = new Random();
 
         public Game1()
         {
@@ -67,7 +68,8 @@ namespace Mathcraft
         {
             // Creates a striped hollow sphere hull and a core
             double sphere = Math.Pow(p.X - 10, 2) + Math.Pow(p.Y - 10, 2) + Math.Pow(p.Z - 10, 2);
-            return sphere >= 40 && sphere <= 50 && p.Y % 2 == 0 || sphere >= 0 && sphere <= 5;
+            return sphere >= 40 && sphere <= 50 && p.Y % 2 == 0 || sphere >= 0 && sphere <= 5 ||
+                p.X % 4 == 0 && p.Y % 3 == 0 && p.Z % 6 == 0;
         }
 
         int TestMaterial(Point3D p)
@@ -75,7 +77,8 @@ namespace Mathcraft
             // assigns materials to core and hull
             double sphere = Math.Pow(p.X - 10, 2) + Math.Pow(p.Y - 10, 2) + Math.Pow(p.Z - 10, 2);
             if (sphere >= 0 && sphere <= 5) return 23;
-            return 3;
+            if (sphere >= 40 && sphere <= 50) return 3;
+            return rand.Next(255);
         }
 
         /// <summary>
