@@ -26,10 +26,13 @@ namespace Mathcraft
         const int CURSOR_BLINK_DELAY_MS = 200;
         int cursor_blink = 0;
         bool drawCursor = true;
+        bool justOpened = false;
+
+        Dictionary<Keys, int> pressDurations = new Dictionary<Keys, int>();
 
         StringBuilder inputBuffer = new StringBuilder();
 
-        KeyboardState prevKbd;
+        KeyboardState prevKbd, kbd;
 
         public bool IsOpen
         {
@@ -62,6 +65,7 @@ namespace Mathcraft
         public void Show()
         {            
             show = true;
+            justOpened = true;
         }
 
         public override void Draw(GameTime gameTime)
@@ -77,7 +81,7 @@ namespace Mathcraft
 
                 String text;
                 if (drawCursor && cursorOffset >= inputBuffer.Length) text = inputBuffer.ToString() + "_";
-                else if (drawCursor && cursorOffset > 0)
+                else if (drawCursor && cursorOffset > 0 && inputBuffer[cursorOffset] != '\n')
                 {
                     char temp = inputBuffer[cursorOffset];
                     inputBuffer[cursorOffset] = '_';
@@ -96,7 +100,7 @@ namespace Mathcraft
 
         public override void Update(GameTime gameTime)
         {
-            var kbd = Keyboard.GetState();
+            kbd = Keyboard.GetState();
 
             if (show)
             {
@@ -130,9 +134,9 @@ namespace Mathcraft
                     bool shift = kbd.IsKeyDown(Keys.LeftShift);
                     bool alt = kbd.IsKeyDown(Keys.RightAlt);
 
-                    if (key == Keys.Back && prevKbd.IsKeyUp(Keys.Back))
+                    if (IsPressed(Keys.Back))
                     {
-                        if (inputBuffer.Length > 0)
+                        if (inputBuffer.Length > 0 && cursorOffset > 0)
                         {
                             inputBuffer.Remove(inputBuffer.Length - 1, 1);
                             cursorOffset--;
@@ -143,7 +147,12 @@ namespace Mathcraft
                         inputBuffer.Append(" ");
                         cursorOffset += 2;
                     }
-                    else if (IsValidChar(key) && prevKbd.IsKeyUp(key))
+                    else if (key == Keys.Enter && prevKbd.IsKeyUp(Keys.Enter))
+                    {
+                        inputBuffer.Append("\n");
+                        cursorOffset++;
+                    }
+                    else if (IsValidChar(key) && IsPressed(key))
                     {
                         char ch = KeyCodeToChar(key, shift, alt);
 
@@ -166,6 +175,28 @@ namespace Mathcraft
             
             base.Update(gameTime);
         }       
+
+        bool IsPressed(Keys k)
+        {
+            if (k == Keys.None) return false;
+            if (!pressDurations.ContainsKey(k)) pressDurations.Add(k, 0);
+
+            if (kbd.IsKeyDown(k)) pressDurations[k] += 2;
+
+            if (kbd.IsKeyDown(k) && prevKbd.IsKeyUp(k))
+            {
+                return true;
+            }
+            else if (pressDurations[k] > 60 && kbd.IsKeyDown(k))
+            {
+                pressDurations[k] = 0;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         
         bool IsValidChar(Keys key)
         {
@@ -187,7 +218,7 @@ namespace Mathcraft
             const string LOOKUP =
             "################################" + // 0..31 junk
             " ###############0123456789######" + // 32(space), 48..57(0..9)
-            "#abcdefghijklmnopqrstuvwxyxz####" + // 65=A, 90=Z
+            "#abcdefghijklmnopqrstuvwxyzz####" + // 65=A, 90=Z
             "0123456789*+,-./################" +
             "################################" +
             "##########################;+,-.#" +
@@ -197,7 +228,7 @@ namespace Mathcraft
             const string LOOKUP_SHIFT =
             "################################" + // 0..31 junk
             " ###############=!\"§$%&/()######" + // 32(space), 48..57(0..9)
-            "#ABCDEFGHIJKLMNOPQRSTUVWXYXZ####" + // 65=A, 90=Z
+            "#ABCDEFGHIJKLMNOPQRSTUVWXYZZ####" + // 65=A, 90=Z
             "=!\"§$%&/()**;_:/################" +
             "################################" +
             "##########################;*;_:/" +
