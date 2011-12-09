@@ -19,8 +19,8 @@ namespace Mathcraft
         Vector2 cursorPos = Vector2.Zero;
         int cursorOffset = 0;
 
-        const int CURSOR_START_Y = 20;
-        const int CURSOR_START_X = 20;
+        int CURSOR_START_Y = 20;
+        int CURSOR_START_X = 20;
         const float CURSOR_WIDTH = 12;
 
         const int CURSOR_BLINK_DELAY_MS = 200;
@@ -30,6 +30,11 @@ namespace Mathcraft
         StringBuilder inputBuffer = new StringBuilder();
 
         KeyboardState prevKbd;
+
+        public bool IsOpen
+        {
+            get { return show; }
+        }
 
         public TextInputComponent(Game game)
             : base(game)
@@ -47,6 +52,13 @@ namespace Mathcraft
             base.LoadContent();
         }
 
+        public override void Initialize()
+        {
+            CURSOR_START_Y = 20 + Game.GraphicsDevice.PresentationParameters.BackBufferHeight / 2;
+            
+            base.Initialize();
+        }
+
         public void Show()
         {            
             show = true;
@@ -61,7 +73,7 @@ namespace Mathcraft
             {
                 spriteBatch.Begin();
 
-                spriteBatch.Draw(background, new Rectangle(0, 0, width, height), Color.White);
+                spriteBatch.Draw(background, new Rectangle(0, height/2, width, height), Color.White);
 
                 String text;
                 if (drawCursor && cursorOffset >= inputBuffer.Length) text = inputBuffer.ToString() + "_";
@@ -88,8 +100,11 @@ namespace Mathcraft
 
             if (show)
             {
-                if (kbd.IsKeyDown(Keys.Escape) && prevKbd.IsKeyUp(Keys.Escape))
+                if (kbd.IsKeyDown(Keys.Enter) && prevKbd.IsKeyUp(Keys.Enter) && kbd.IsKeyDown(Keys.LeftControl))
+                {                    
                     show = false;
+                    return;
+                }
 
                 if (cursor_blink < CURSOR_BLINK_DELAY_MS)
                     cursor_blink += gameTime.ElapsedGameTime.Milliseconds;
@@ -110,7 +125,7 @@ namespace Mathcraft
                 if (keys.Length > 0 && (int)keys[0] > 0 || keys.Length > 1)
                 {
                     Keys[] skip = new Keys[] { Keys.LeftShift, Keys.LeftControl, Keys.LeftAlt, Keys.None };
-                    Keys key = (from k in keys where !skip.Contains(k) select k).FirstOrDefault();
+                    Keys key = (from k in keys where !skip.Contains(k) && prevKbd.IsKeyUp(k) select k).FirstOrDefault();
 
                     bool shift = kbd.IsKeyDown(Keys.LeftShift);
                     bool alt = kbd.IsKeyDown(Keys.RightAlt);
@@ -123,9 +138,14 @@ namespace Mathcraft
                             cursorOffset--;
                         }
                     }
+                    else if (key == Keys.Tab && prevKbd.IsKeyUp(Keys.Tab))
+                    {
+                        inputBuffer.Append(" ");
+                        cursorOffset += 2;
+                    }
                     else if (IsValidChar(key) && prevKbd.IsKeyUp(key))
                     {
-                        char ch = KeyCodeToChar(key, shift, alt);                        
+                        char ch = KeyCodeToChar(key, shift, alt);
 
                         if (cursorOffset >= inputBuffer.Length)
                         {
@@ -135,7 +155,7 @@ namespace Mathcraft
                         {
                             inputBuffer[cursorOffset] = ch;
                         }
-                        cursorOffset++;                        
+                        cursorOffset++;
                     }
 
                     cursorPos.X = CURSOR_START_X + cursorOffset * CURSOR_WIDTH;
@@ -152,7 +172,8 @@ namespace Mathcraft
             Keys[] invalid = new Keys[] {
                 Keys.Left, Keys.Right, Keys.Up, Keys.Down,
                 Keys.Back, Keys.Delete, Keys.BrowserBack, Keys.LeftShift,
-                Keys.LeftAlt, Keys.LeftControl, Keys.LeftWindows, Keys.Enter
+                Keys.LeftAlt, Keys.LeftControl, Keys.LeftWindows, Keys.Enter,
+                Keys.Escape
             };
 
             if (invalid.Contains(key)) return false;

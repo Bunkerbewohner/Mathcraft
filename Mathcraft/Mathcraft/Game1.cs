@@ -21,6 +21,7 @@ namespace Mathcraft
 
         KeyboardState prevKbd;
         TextInputComponent textInput;
+        Camera camera;
 
         MathGeometry geom;
         Random rand = new Random();
@@ -42,10 +43,10 @@ namespace Mathcraft
             textInput = new TextInputComponent(this);
             Components.Add(textInput);
 
-            Camera cam = new FirstPersonCamera(this);
-            Components.Add(cam);
+            camera = new FirstPersonCamera(this);
+            Components.Add(camera);
 
-            cam.Activate();
+            camera.Activate();
 
             base.Initialize();
         }
@@ -98,13 +99,20 @@ namespace Mathcraft
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed
+                || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
 
             KeyboardState kbd = Keyboard.GetState();
 
             if (kbd.IsKeyDown(Keys.Enter) && prevKbd.IsKeyUp(Keys.Enter))
+            {
                 textInput.Show();
+                camera.Enabled = false;
+            }
+
+            if (!textInput.IsOpen && !camera.Enabled)
+                camera.Enabled = true;
 
             base.Update(gameTime);
         }
