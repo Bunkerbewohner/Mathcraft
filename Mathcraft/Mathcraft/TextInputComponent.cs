@@ -14,7 +14,7 @@ namespace Mathcraft
         SpriteFont font;
         Texture2D background;
         Texture2D cursor;
-        bool show = true;
+        bool show = false;
 
         Vector2 cursorPos = Vector2.Zero;
         int cursorOffset = 0;
@@ -106,15 +106,14 @@ namespace Mathcraft
                     cursorOffset = Math.Min(inputBuffer.Length, cursorOffset + 1);
 
                 Keys[] keys = kbd.GetPressedKeys();
-                if (keys.Length > 0)
-                {
-                    Keys key = keys[0];                   
-                    Keys key2 = keys.Length > 1 ? keys[1] : Keys.BrowserBack;
 
-                    bool shift = key == Keys.LeftShift || key2 == Keys.LeftShift;
+                if (keys.Length > 0 && (int)keys[0] > 0 || keys.Length > 1)
+                {
+                    Keys[] skip = new Keys[] { Keys.LeftShift, Keys.LeftControl, Keys.LeftAlt, Keys.None };
+                    Keys key = (from k in keys where !skip.Contains(k) select k).FirstOrDefault();
+
+                    bool shift = kbd.IsKeyDown(Keys.LeftShift);
                     bool alt = kbd.IsKeyDown(Keys.RightAlt);
-                    if (key == Keys.LeftShift) key = key2;
-                    if (key == Keys.LeftControl && keys.Length == 3) key = keys[2];
 
                     if (key == Keys.Back && prevKbd.IsKeyUp(Keys.Back))
                     {
