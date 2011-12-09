@@ -4,9 +4,9 @@ float4x4 View;
 float4x4 Projection;
 
 
-float3 LightDir = normalize(float3(-1, -1, -1));
-float3 DiffuseLight = 0.8;
-float3 AmbientColor = 0.6;
+float3 LightDir = normalize(float3(-1, -1, 1));
+float3 DiffuseLight = 0.3;
+float3 AmbientColor = 0.8;
 
 texture Materials;
 
@@ -83,10 +83,10 @@ PixelShaderOutput PixelShaderFunction(VertexShaderOutput input)
 
 	// Compute lighting, using a simple Lambert model. 
 	float diffuseAmount = max(-dot(input.Normal, LightDir), 0);
-	float3 lightingResult = saturate(diffuseAmount * color);		
+	float3 lightingResult = saturate(diffuseAmount * color * DiffuseLight + AmbientColor * color);		
 
 	output.Color = float4(lightingResult, 1);
-	output.Color = float4(color, 1);
+	//output.Color = float4(color, 1);
 
 	return output;
 }

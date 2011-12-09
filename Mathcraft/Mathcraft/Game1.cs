@@ -63,17 +63,17 @@ namespace Mathcraft
              geom = new MathGeometry(this, param);
         }
 
-        bool TestVisibility(Point3D p)
+        bool TestVisibility(Point3D p)        
         {
+            // Creates a striped hollow sphere hull and a core
             double sphere = Math.Pow(p.X - 10, 2) + Math.Pow(p.Y - 10, 2) + Math.Pow(p.Z - 10, 2);
-
             return sphere >= 40 && sphere <= 50 && p.Y % 2 == 0 || sphere >= 0 && sphere <= 5;
         }
 
         int TestMaterial(Point3D p)
         {
+            // assigns materials to core and hull
             double sphere = Math.Pow(p.X - 10, 2) + Math.Pow(p.Y - 10, 2) + Math.Pow(p.Z - 10, 2);
-
             if (sphere >= 0 && sphere <= 5) return 23;
             return 3;
         }
