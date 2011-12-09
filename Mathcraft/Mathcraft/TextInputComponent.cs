@@ -14,7 +14,7 @@ namespace Mathcraft
         SpriteFont font;
         Texture2D background;
         Texture2D cursor;
-        bool show = true;
+        bool show = false;
 
         Vector2 cursorPos = Vector2.Zero;
         int cursorOffset = 0;
@@ -180,7 +180,7 @@ namespace Mathcraft
             "=!\"§$%&/()**;_:/################" +
             "################################" +
             "##########################;*;_:/" +
-            "`##########################[°]‘#" + // 192..223
+            "`##########################?°]‘#" + // 192..223
             "##>#############################";
 
             const string LOOKUP_ALT =

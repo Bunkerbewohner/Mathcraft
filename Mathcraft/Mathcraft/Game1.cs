@@ -22,6 +22,8 @@ namespace Mathcraft
         KeyboardState prevKbd;
         TextInputComponent textInput;
 
+        MathGeometry geom;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -39,6 +41,11 @@ namespace Mathcraft
             textInput = new TextInputComponent(this);
             Components.Add(textInput);
 
+            Camera cam = new FirstPersonCamera(this);
+            Components.Add(cam);
+
+            cam.Activate();
+
             base.Initialize();
         }
 
@@ -51,7 +58,21 @@ namespace Mathcraft
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            GeometryParameters param = new GeometryParameters(
+                new Point3D(-50, -50, -200), new Point3D(100, 100, 100), TestVisibility, TestMaterial);
+             geom = new MathGeometry(this, param);
+        }
+
+        bool TestVisibility(Point3D p)
+        {
+            double sphere = Math.Pow(p.X - 10, 2) + Math.Pow(p.Y - 10, 2) + Math.Pow(p.Z - 10, 2);
+
+            return sphere >= 40 && sphere <= 50 && p.Y % 2 == 0;
+        }
+
+        int TestMaterial(Point3D p)
+        {
+            return 7;
         }
 
         /// <summary>
@@ -90,7 +111,7 @@ namespace Mathcraft
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            geom.Draw();
 
             base.Draw(gameTime);
         }
