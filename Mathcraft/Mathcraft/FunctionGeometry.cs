@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Diagnostics;
 
 namespace Mathcraft
 {    
@@ -238,7 +239,7 @@ namespace Mathcraft
                         voxels.Add(v);
                     }
                 }
-            }
+            }            
 
             instanceBuffer = new VertexBuffer(graphics, typeof(VoxelVertex), voxels.Count, BufferUsage.WriteOnly);
             instanceBuffer.SetData(voxels.ToArray());

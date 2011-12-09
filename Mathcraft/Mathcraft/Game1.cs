@@ -48,6 +48,9 @@ namespace Mathcraft
 
             camera.Activate();
 
+            var gm = new GeometryManager(this);
+            Components.Add(gm);
+
             base.Initialize();
         }
 
@@ -61,25 +64,18 @@ namespace Mathcraft
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             GeometryParameters param = new GeometryParameters(
-                new Point3D(-50, -50, -200), new Point3D(100, 100, 100), TestVisibility, TestMaterial);
+                new Point3D(-50, -50, -200), new Point3D(20, 20, 1), TestVisibility, TestMaterial);
              geom = new MathGeometry(this, param);
         }
 
         bool TestVisibility(Point3D p)        
         {
-            // Creates a striped hollow sphere hull and a core
-            double sphere = Math.Pow(p.X - 10, 2) + Math.Pow(p.Y - 10, 2) + Math.Pow(p.Z - 10, 2);
-            return sphere >= 40 && sphere <= 50 && p.Y % 2 == 0 || sphere >= 0 && sphere <= 5 ||
-                p.X % 4 == 0 && p.Y % 3 == 0 && p.Z % 6 == 0;
+            return p.y == 0 && p.x % 5 == 0 && p.z % 5 == 0;
         }
 
         int TestMaterial(Point3D p)
         {
-            // assigns materials to core and hull
-            double sphere = Math.Pow(p.X - 10, 2) + Math.Pow(p.Y - 10, 2) + Math.Pow(p.Z - 10, 2);
-            if (sphere >= 0 && sphere <= 5) return 23;
-            if (sphere >= 40 && sphere <= 50) return 3;
-            return rand.Next(255);
+            return 1;
         }
 
         /// <summary>
@@ -110,9 +106,6 @@ namespace Mathcraft
                 textInput.Show();
                 camera.Enabled = false;
             }
-
-            if (!textInput.IsOpen && !camera.Enabled)
-                camera.Enabled = true;
 
             base.Update(gameTime);
         }
