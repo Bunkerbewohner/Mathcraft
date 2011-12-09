@@ -110,6 +110,7 @@
     <Compile Include="FunctionGeometry.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="MathTerm.cs" />
+    <Compile Include="Point3D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
