@@ -14,7 +14,7 @@ namespace Mathcraft
         SpriteFont font;
         Texture2D background;
         Texture2D cursor;
-        bool show = false;
+        bool show = true;
 
         Vector2 cursorPos = Vector2.Zero;
         int cursorOffset = 0;
@@ -117,8 +117,11 @@ namespace Mathcraft
 
                     if (key == Keys.Back && prevKbd.IsKeyUp(Keys.Back))
                     {
-                        inputBuffer.Remove(inputBuffer.Length - 1, 1);
-                        cursorOffset--;
+                        if (inputBuffer.Length > 0)
+                        {
+                            inputBuffer.Remove(inputBuffer.Length - 1, 1);
+                            cursorOffset--;
+                        }
                     }
                     else if (IsValidChar(key) && prevKbd.IsKeyUp(key))
                     {
