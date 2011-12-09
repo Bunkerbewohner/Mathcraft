@@ -203,7 +203,7 @@ namespace Mathcraft
             geometryBuffer.SetData(shapeVertices);
 
             indexBuffer = new IndexBuffer(gd, IndexElementSize.SixteenBits, 36, BufferUsage.WriteOnly);
-            short[] indices = (from nr in Enumerable.Range(0, 35) select (short)nr).ToArray();
+            short[] indices = (from nr in Enumerable.Range(0, 36) select (short)nr).ToArray();
             indexBuffer.SetData(indices);
         }
 
