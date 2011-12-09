@@ -115,6 +115,7 @@ namespace Mathcraft
                 bottomLeftFront, frontNormal, textureBottomLeft);
             shapeVertices[2] = new VertexPositionNormalTexture(
                 topRightFront, frontNormal, textureTopRight);
+
             shapeVertices[3] = new VertexPositionNormalTexture(
                 bottomLeftFront, frontNormal, textureBottomLeft);
             shapeVertices[4] = new VertexPositionNormalTexture(
@@ -129,6 +130,7 @@ namespace Mathcraft
                 topRightBack, backNormal, textureTopLeft);
             shapeVertices[8] = new VertexPositionNormalTexture(
                 bottomLeftBack, backNormal, textureBottomRight);
+
             shapeVertices[9] = new VertexPositionNormalTexture(
                 bottomLeftBack, backNormal, textureBottomRight);
             shapeVertices[10] = new VertexPositionNormalTexture(
@@ -143,6 +145,7 @@ namespace Mathcraft
                 topRightBack, topNormal, textureTopRight);
             shapeVertices[14] = new VertexPositionNormalTexture(
                 topLeftBack, topNormal, textureTopLeft);
+
             shapeVertices[15] = new VertexPositionNormalTexture(
                 topLeftFront, topNormal, textureBottomLeft);
             shapeVertices[16] = new VertexPositionNormalTexture(
@@ -157,6 +160,7 @@ namespace Mathcraft
                 bottomLeftBack, bottomNormal, textureBottomLeft);
             shapeVertices[20] = new VertexPositionNormalTexture(
                 bottomRightBack, bottomNormal, textureBottomRight);
+
             shapeVertices[21] = new VertexPositionNormalTexture(
                 bottomLeftFront, bottomNormal, textureTopLeft);
             shapeVertices[22] = new VertexPositionNormalTexture(
@@ -171,6 +175,7 @@ namespace Mathcraft
                 bottomLeftBack, leftNormal, textureBottomLeft);
             shapeVertices[26] = new VertexPositionNormalTexture(
                 bottomLeftFront, leftNormal, textureBottomRight);
+
             shapeVertices[27] = new VertexPositionNormalTexture(
                 topLeftBack, leftNormal, textureTopLeft);
             shapeVertices[28] = new VertexPositionNormalTexture(
@@ -185,6 +190,8 @@ namespace Mathcraft
                 bottomRightFront, rightNormal, textureBottomLeft);
             shapeVertices[32] = new VertexPositionNormalTexture(
                 bottomRightBack, rightNormal, textureBottomRight);
+
+            // Something's wrong here
             shapeVertices[33] = new VertexPositionNormalTexture(
                 topRightBack, rightNormal, textureTopRight);
             shapeVertices[34] = new VertexPositionNormalTexture(
