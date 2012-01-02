@@ -18,6 +18,7 @@ namespace Mathcraft
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        SpriteFont spriteFont;
 
         KeyboardState prevKbd;
         TextInputComponent textInput;
@@ -41,7 +42,7 @@ namespace Mathcraft
         protected override void Initialize()
         {
             textInput = new TextInputComponent(this);
-            Components.Add(textInput);
+            Components.Add(textInput);            
 
             camera = new FirstPersonCamera(this);
             Components.Add(camera);
@@ -66,6 +67,8 @@ namespace Mathcraft
             GeometryParameters param = new GeometryParameters(
                 new Point3D(-50, -50, -200), new Point3D(20, 20, 1), TestVisibility, TestMaterial);
              geom = new MathGeometry(this, param);
+
+             spriteFont = Content.Load<SpriteFont>("MathFont");
         }
 
         bool TestVisibility(Point3D p)        
@@ -121,6 +124,15 @@ namespace Mathcraft
             geom.Draw();
 
             base.Draw(gameTime);
+
+            if (!textInput.IsOpen)
+            {
+                spriteBatch.Begin();
+                spriteBatch.DrawString(spriteFont, "WASD - Move\n" + "Mouse - Look around\n" +
+                    "ESC - Exit\n" + "RETURN - Open Python console\n" + "CTRL + C - Close console",
+                    new Vector2(20, 40), Color.White);
+                spriteBatch.End();
+            }
         }
     }
 }

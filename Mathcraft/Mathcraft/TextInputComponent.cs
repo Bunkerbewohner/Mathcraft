@@ -72,6 +72,11 @@ namespace Mathcraft
             if (show) return;
             showNextTime = true;
             justOpened = true;
+
+            if (this.inputBuffer.Length == 0)
+            {
+                this.inputBuffer.Append("def visible(p):\n    return p.x + p.y == p.z * 2\n\ndef material(p):\n    return 3\n");
+            }
         }
 
         void Close()
@@ -118,6 +123,13 @@ namespace Mathcraft
                     spriteBatch.DrawString(font, result.Message, new Vector2(19, 19), Color.Black);
                     spriteBatch.DrawString(font, result.Message, new Vector2(20, 20), Color.White);                    
                 }
+
+                spriteBatch.DrawString(font, "You have to define two functions 'visible' and 'material',\n" +
+                    "both accepting a Point3D as parameter. 'visible' must return for a point if it\n" +
+                    "is visible, material returns the material index (see spritesheet).\n" +
+                    "Press F5 to evaluate the script and let the program create the cube geometry\n" +
+                    "which is defined by those two functions. Press CTRL + C to close the console.",
+                    new Vector2(20, 40), Color.White);
 
                 spriteBatch.End();
             }
